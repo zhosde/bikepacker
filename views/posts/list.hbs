@@ -1,0 +1,11 @@
+<h1>Cycle Routes</h1>
+<h3>Click on the cycle route to check the detail!</h3>
+<section class="posts">
+{{#each posts}}
+<div class="postsInfo">
+<img src="{{this.image}}"/><br>
+<h3>{{this.title}}</h3>
+<a href="/cycle-routes/{{this._id}}">See more</a>
+</div>
+{{/each}}
+</section>

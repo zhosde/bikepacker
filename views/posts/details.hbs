@@ -1,0 +1,12 @@
+<div class="details">
+  <a href="/cycle-routes">Go back</a><br />
+  <img src="{{post.image}}" /><br />
+  <h2>{{post.title}}</h2>
+  <hr />
+  <p>by {{author.username}}</p>
+  <p>City: {{post.city}}</p>
+  <p>{{post.content}}</p>
+  <p>Route Length: {{post.routeLength}}</p>
+  <hr />
+</div>
+<a href="/users/{{author._id}}/posts">See all {{author.username}}'s posts </a>

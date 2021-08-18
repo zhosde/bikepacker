@@ -32,7 +32,7 @@ router.post(
       .then((dbPost) => {
         return User.findByIdAndUpdate(author, { $push: { posts: dbPost._id } });
       })
-      .then(() => res.redirect("/posts"))
+      .then(() => res.redirect("/"))
       .catch((err) => {
         console.log(`Err while creating the post in the DB: ${err}`);
         next(err);
@@ -44,7 +44,7 @@ router.post(
 // display all the posts
 // ****************************************************************************************
 
-router.get("/posts", (req, res, next) => {
+router.get("/", (req, res, next) => {
   Post.find()
     .populate("author")
     .then((postsFromDB) =>

@@ -7,7 +7,7 @@ const postSchema = new Schema(
     routeLength: String,
     content: String,
     author: { type: Schema.Types.ObjectId, ref: "User" },
-    image: String,
+    imageUrl: String,
   },
   {
     timestamps: true,

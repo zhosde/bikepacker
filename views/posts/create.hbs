@@ -1,15 +1,15 @@
 <h2>Create a new post</h2>
 
-<form action="/post-create" method="POST">
+<form action="/create" method="POST" enctype="multipart/form-data">
   <label>
     Title:
-    <input type="text" name="title" />
+    <input type="text" name="title" required/>
   </label>
   <br />
 
   <label>
     City:
-    <textarea type="text" name="city"> </textarea>
+    <input type="text" name="city"> </input>
   </label>
   <br />
 
@@ -21,26 +21,19 @@
 
   <label>
     Content:
-    <textarea type="text" name="content"> </textarea>
-  </label>
-  <br />
-
-  <label for="author-select">
-    Created by:
-    <select name="author">
-      <option disable selected value=""></option>
-      {{#each dbUsers}}
-        <option value="{{this._id}}"> {{this.username}} </option>
-      {{/each}}
-    </select>
+    <textarea type="text" name="content" cols='30' rows='4'> </textarea>
   </label>
   <br />
 
   <label>
     Upload Image:
-    <input type="file" id="uploadFile" name="image" />
-    <input type="submit" />
+    <input type="file" name="post-image" />
   </label>
   <br />
-  <button type="submit"> Create the post </button>
+  <button type="submit"> Create </button>
+  <label>
+  {{#if errorMessage}} 
+  {{errorMessage}}
+  {{/if}}
+  </label>
 </form>

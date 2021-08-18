@@ -46,7 +46,8 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
         passwordHash: hashedPassword,
       });
     })
-    .then((userFromDB) => {
+    .then((user) => {
+      req.session.currentUser = user;
       res.redirect("/userProfile");
     })
     .catch((error) => {
@@ -73,7 +74,6 @@ router.get("/login", isLoggedOut, (req, res) => res.render("auth/login"));
 
 // POST login route ==> to process form data
 router.post("/login", isLoggedOut, (req, res, next) => {
-  console.log("SESSION =====> ", req.session);
   const { email, password } = req.body;
   // make sure users fill in the requested inputs
   if (email === "" || password === "") {

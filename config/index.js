@@ -17,6 +17,15 @@ const favicon = require("serve-favicon");
 // https://www.npmjs.com/package/path
 const path = require("path");
 
+// require session
+const session = require("express-session");
+
+// MongoStore in order to save the user session in the database
+const MongoStore = require("connect-mongo");
+
+// Connects the mongo uri to maintain the same naming structure
+const MONGO_URI = require("../utils/consts");
+
 // Middleware configuration
 module.exports = (app) => {
   // In development environment the app logs
@@ -35,5 +44,20 @@ module.exports = (app) => {
   app.use(express.static(path.join(__dirname, "..", "public")));
 
   // Handles access to the favicon
-  app.use(favicon(path.join(__dirname, "..", "public", "images", "favicon.ico")));
+  app.use(
+    favicon(path.join(__dirname, "..", "public", "images", "favicon.ico"))
+  );
+
+  app.set("trust proxy", 1);
+
+  app.use(
+    session({
+      secret: process.env.SESS_SECRET || "super hyper secret key",
+      resave: false,
+      saveUninitialized: false,
+      store: MongoStore.create({
+        mongoUrl: process.env.MONGODB_URI || "mongodb://localhost/Bikepacker",
+      }),
+    })
+  );
 };

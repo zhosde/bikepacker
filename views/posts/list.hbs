@@ -3,9 +3,9 @@
 <section class="posts">
 {{#each posts}}
 <div class="postsInfo">
-<img src="{{imageUrl}}" alt='{{post.title}}'/><br>
+<img src="{{this.imageUrl}}" alt='{{this.title}}'/><br>
 <h3>{{this.title}}</h3>
-<a href="/posts/{{_id}}/details">See more</a>
+<a href="/posts/{{this._id}}/details">See more</a>
 </div>
 {{/each}}
 </section>

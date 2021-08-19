@@ -15,10 +15,7 @@ const hbs = require("hbs");
 
 const app = express();
 
-// use the session and pre-defined Express app
-require("./config/session.config")(app);
-
-// ℹ️ This function is getting exported from the config folder. It runs most pieces of middleware
+// This function is getting exported from the config folder. It runs most pieces of middleware
 require("./config")(app);
 
 // default value for title local
@@ -26,7 +23,7 @@ const projectName = "Bikepacker";
 const capitalized = (string) =>
   string[0].toUpperCase() + string.slice(1).toLowerCase();
 
-app.locals.title = `${capitalized(projectName)} created with IronLauncher`;
+app.locals.title = `${capitalized(projectName)}`;
 
 // 👇 Start handling routes here
 const index = require("./routes/index");

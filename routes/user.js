@@ -1,11 +1,11 @@
 const router = require("express").Router();
+const mongoose = require("mongoose");
 
 const bcryptjs = require("bcryptjs");
 const saltRounds = 10;
 
 const User = require("../models/User.model");
-
-const mongoose = require("mongoose");
+const Post = require("../models/Post.model");
 
 // require auth middleware
 const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard.js");
@@ -13,7 +13,7 @@ const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard.js");
 //////////// S I G N U P ///////////
 
 // GET route ==> to display the signup form to users
-router.get("/signup", (req, res) => res.render("auth/signup"));
+router.get("/signup", isLoggedOut, (req, res) => res.render("auth/signup"));
 
 // POST route ==> to process form data
 router.post("/signup", isLoggedOut, (req, res, next) => {
@@ -47,7 +47,7 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
       });
     })
     .then((user) => {
-      req.session.currentUser = user;
+      req.session.user = user;
       res.redirect("/userProfile");
     })
     .catch((error) => {
@@ -97,7 +97,7 @@ router.post("/login", isLoggedOut, (req, res, next) => {
       } else if (bcryptjs.compareSync(password, user.passwordHash)) {
         //res.render("users/user-profile", { user });
         //******* SAVE THE USER IN THE SESSION ********//
-        req.session.currentUser = user;
+        req.session.user = user;
         res.redirect("/userProfile");
       } else {
         res.render("auth/login", { errorMessage: "Incorrect password." });
@@ -106,10 +106,19 @@ router.post("/login", isLoggedOut, (req, res, next) => {
     .catch((error) => next(error));
 });
 
-// use isLoggedIn middleware function to protect the profile route
-router.get("/userProfile", isLoggedIn, (req, res) =>
-  res.render("users/user-profile", { userInSession: req.session.currentUser })
-);
+//////////// User Profile ///////////
+
+router.get("/userProfile", isLoggedIn, (req, res, next) => {
+  const userId = req.session.user._id;
+  User.findById(userId)
+    .then((userFromDB) => {
+      res.render("users/user-profile", { user: userFromDB });
+    })
+    .catch((err) => {
+      console.log(`Error while getting user profile: ${err}`);
+      next(err);
+    });
+});
 
 //////////// L O G O U T ///////////
 

@@ -2,7 +2,7 @@ const router = require("express").Router();
 const Post = require("../models/Post.model.js");
 const User = require("../models/User.model.js");
 const mongoose = require("mongoose");
-const { isLoggedIn, isLoggedOut } = require("../middleware/route-guard.js");
+const { isLoggedIn } = require("../middleware/route-guard.js");
 
 // Require fileUploader in order to use it
 const fileUploader = require("../config/cloudinary.config");
@@ -12,13 +12,7 @@ const fileUploader = require("../config/cloudinary.config");
 // ****************************************************************************************
 
 router.get("/create", isLoggedIn, (req, res) => {
-  User.find()
-    .then((dbUsers) => {
-      res.render("posts/create", { dbUsers });
-    })
-    .catch((err) =>
-      console.log(`Err while creating post: ${err}`)
-    );
+  res.render("posts/create");
 });
 
 router.post(
@@ -26,16 +20,22 @@ router.post(
   isLoggedIn,
   fileUploader.single("post-image"),
   (req, res, next) => {
-    const { title, author, city, routeLength, content, image } = req.body;
+    const { author, title, content, city, routeLength} = req.body;
 
-    Post.create({ title, author, city, routeLength, content, imageUrl })
-      .then((dbPost) => {
-        return User.findByIdAndUpdate(author, { $push: { posts: dbPost._id } });
+    const imageUrl = req.file?.path;
+
+    Post.create({ author, title, content, city, routeLength, imageUrl })
+      .then((newPost) => {
+        return User.findByIdAndUpdate(author, {
+          $push: { posts: newPost._id, newPost },
+        });
       })
-      .then(() => res.redirect("/"))
-      .catch((err) => {
-        console.log(`Err while creating the post in the DB: ${err}`);
-        next(err);
+      .then((newPost) => {
+        res.redirect("/");
+      })
+      .catch((error) => {
+        console.log("Error while creating the post: ", error);
+        next(error);
       });
   }
 );
@@ -49,11 +49,14 @@ router.get("/", (req, res, next) => {
     .populate("author")
     .then((postsFromDB) =>
       res.render("posts/list", {
-        posts: postsFromDB
+        posts: postsFromDB,
       })
     )
     .catch((error) => {
-      console.log("Error while getting the cycle routes from the DB", error);
+      console.log(
+        "Error while getting all the cycle routes from the DB",
+        error
+      );
       next(error);
     });
 });
@@ -65,7 +68,7 @@ router.get("/", (req, res, next) => {
 router.get("/:postId/details", isLoggedIn, (req, res, next) => {
   const { postId } = req.params;
   Post.findById(postId)
-    .populate('author')
+    .populate("author")
     .then((thePost) =>
       res.render("posts/details", { post: thePost })
     )
@@ -81,18 +84,34 @@ router.get("/:postId/details", isLoggedIn, (req, res, next) => {
 
 router.get("/:postId/edit", isLoggedIn, (req, res) => {
   const { postId } = req.params;
-  const {title, author, city, routeLength, content, imageUrl} = req.body;
-  Post.findByIdAndUpdate(postId, {
-    title,
-    author,
-    city,
-    routeLength,
-    content,
-    imageUrl,
-  }, {new: true}).then((updatedPost) => {
-    res.ridrecter(`/${updatedPost.id}/details`)
-    });
+  Post.findById(postId).then((postToEdit) => {
+    res.render("posts/edit", { post: postToEdit });
   });
+});
+
+router.post(
+  "/:postId/edit",
+  isLoggedIn,
+  fileUploader.single("post-image"),
+  (req, res, next) => {
+    const { postId } = req.params;
+    const { author, title, city, routeLength, content } = req.body;
+    const objectToEdit = { title, city, routeLength, content };
+
+    if (req.file) {
+      objectToEdit.imageUrl = req.file.path;
+    }
+
+    Post.findByIdAndUpdate(postId, objectToEdit, {new:true})
+      .then((updatedPost) => {
+        res.redirect(`/posts/${updatedPost._id}/details`);
+      })
+      .catch((error) => {
+        console.log('Error while updating the post: ', error)
+        next(error);
+      });
+  }
+);
 
 // ****************************************************************************************
 // delete a post
@@ -101,9 +120,8 @@ router.get("/:postId/edit", isLoggedIn, (req, res) => {
 router.post("/:postId/delete", isLoggedIn, (req, res, next) => {
   const { postId } = req.params;
   Post.findByIdAndRemove(postId)
-    .then(() => res.redirect("/posts"))
+    .then(() => res.redirect("/"))
     .catch((error) => next(error));
 });
-
 
 module.exports = router;

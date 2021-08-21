@@ -40,7 +40,7 @@ form button {
   cursor: pointer;
   display: inline-block;
   font-size: 14px;
-  padding: 8px 16px;
+  padding: 7px 16px;
   text-decoration: none;
   text-transform: uppercase;
   transition: 0.3s ease background;
@@ -65,12 +65,12 @@ form button:hover {
 ul {
   border-bottom: 2px solid #43a3e6;
   height: 30px;
-  padding: 1em 0;
+  padding: 2em 0;
   list-style-type: none;
 }
 
 ul li {
-  line-height: 20px;
+  line-height: 18px;
 }
 
 #to-right, #signup-in {
@@ -89,13 +89,21 @@ ul li {
 }
 
 #to-left {
-  float: left;
+  display:flex;
+  flex-direction: row;
+  align-items: flex-end;
+  margin-bottom: -3rem;
+}
+
+#to-left img{
+  width:5%;
 }
 
 #to-left p a {
-  color: #000;
+  color: #43a3e6;
   font-weight: bold;
   font-size: 2em;
+  margin-left: 0.5em;
 }
 
 #logout-form {
@@ -111,6 +119,7 @@ ul li {
   align-items: center;
   flex-direction: row;  
   justify-content: space-evenly;
+  flex-wrap: wrap;
 }
 
 .posts img,  .details img, .profile-post img{
@@ -129,4 +138,19 @@ ul li {
   margin-top: 2vh;
 }
 
+#index {
+  background-image: url('/images/bike-wallpaper.jpg');
+  height:60vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
 
+#index h1{
+  color: white;
+  margin:2vh;
+}
+
+#index {
+  padding:4vh;
+}

@@ -2,9 +2,11 @@ const mongoose = require("mongoose");
 const Post = require("../models/Post.model");
 const User = rquire("../models/User.model")
 
+require("dotenv").config();
+
 const MONGO_URI = process.env.MONGODB_URI || "mongodb://localhost/Bikepacker";
 
-mongoose.connect(MONGO_URI, {
+mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
   useFindAndModify: false,

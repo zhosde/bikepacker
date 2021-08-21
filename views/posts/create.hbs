@@ -30,6 +30,11 @@
     <input type="file" name="post-image" />
   </label>
   <br />
+  <label>
+    Created By: {{userData.username}}
+    <input type="hidden" name="author" value="{{userData._id}}" />
+  </label>
+  <br />
   <button type="submit"> Create </button>
   {{!-- <label>
   {{#if errorMessage}} 

@@ -3,19 +3,19 @@
 <form action="/posts/{{post._id}}/edit" method="POST" enctype="multipart/form-data">
     <label>
         Title:
-        <input type="text" name="title" value={{post.title}} />
+        <input type="text" name="title" value='{{post.title}}' />
     </label>
     <br />
 
     <label>
         City:
-        <input type="text" name="city" value={{post.city}}> </input>
+        <input type="text" name="city" value='{{post.city}}'> </input>
     </label>
     <br />
 
     <label>
         Route Length:
-        <input type="text" name="routeLength" value={{post.routeLength}}/>
+        <input type="text" name="routeLength" value='{{post.routeLength}}'/>
     </label>
     <br />
 

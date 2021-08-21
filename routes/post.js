@@ -21,7 +21,6 @@ router.post(
   fileUploader.single("post-image"),
   (req, res, next) => {
     const { author, title, content, city, routeLength} = req.body;
-
     const imageUrl = req.file?.path;
 
     Post.create({ author, title, content, city, routeLength, imageUrl })
@@ -30,8 +29,8 @@ router.post(
           $push: { posts: newPost._id, newPost },
         });
       })
-      .then((newPost) => {
-        res.redirect("/");
+      .then(() => {
+        res.redirect("/userProfile");
       })
       .catch((error) => {
         console.log("Error while creating the post: ", error);
@@ -120,7 +119,7 @@ router.post(
 router.post("/:postId/delete", isLoggedIn, (req, res, next) => {
   const { postId } = req.params;
   Post.findByIdAndRemove(postId)
-    .then(() => res.redirect("/"))
+    .then(() => res.redirect("/userProfile"))
     .catch((error) => next(error));
 });
 

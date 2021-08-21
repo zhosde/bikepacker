@@ -29,7 +29,7 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
   // make sure passwords are strong
   const regex = /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{6,}/;
   if (!regex.test(password)) {
-    res.status(500).render("auth/signup", {
+    res.status(400).render("auth/signup", {
       errorMessage:
         "Password needs to have at least 6 chars and must contain at least one number, one lowercase and one uppercase letter.",
     });
@@ -53,11 +53,11 @@ router.post("/signup", isLoggedOut, (req, res, next) => {
     .catch((error) => {
       // make sure error message becomes visible to users
       if (error instanceof mongoose.Error.ValidationError) {
-        res.status(500).render("auth/signup", { errorMessage: error.message });
+        res.status(400).render("auth/signup", { errorMessage: error.message });
       }
       // make sure no duplicated data
       else if (error.code === 11000) {
-        res.status(500).render("auth/signup", {
+        res.status(400).render("auth/signup", {
           errorMessage:
             "Username and email need to be unique. Either username or email is already used.",
         });
@@ -108,9 +108,11 @@ router.post("/login", isLoggedOut, (req, res, next) => {
 
 //////////// User Profile ///////////
 
+// user profile main page
 router.get("/userProfile", isLoggedIn, (req, res, next) => {
   const userId = req.session.user._id;
   User.findById(userId)
+    .populate('posts')
     .then((userFromDB) => {
       res.render("users/user-profile", { user: userFromDB });
     })
@@ -119,6 +121,7 @@ router.get("/userProfile", isLoggedIn, (req, res, next) => {
       next(err);
     });
 });
+
 
 //////////// L O G O U T ///////////
 

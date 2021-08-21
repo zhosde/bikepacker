@@ -1,12 +1,19 @@
 {{#if user}}
+ 
   <h2>Welcome, {{ user.username }}!</h2>
   <p>This is your profile page my friend!</p>
-       <nav>
-        <a href="/posts/create">Create a new post</a>
-      </nav>
-  <button>
-    <a href="/userProfile">Reload the page</a>
-  </button>
+  <nav>
+  <a href="/posts/create">Create a new post</a><br>
+  </nav>
+
+  <h2>Your Posts:</h2>
+  {{#each user.posts}}
+  <div class='profile-post'>
+  <img src="{{this.imageUrl}}" alt='{{this.title}}' /><br>
+  <h3>{{this.title}}</h3>
+  <a href="/posts/{{this._id}}/details" >Details</a>
+  </div>
+  {{/each}}
 {{else}}
-  <p>Still no logged in user, sorry!</p>
+  <p>Still no logged in, sorry!</p>
 {{/if}}

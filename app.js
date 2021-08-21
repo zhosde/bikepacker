@@ -12,6 +12,7 @@ const express = require("express");
 // Handles the handlebars
 // https://www.npmjs.com/package/hbs
 const hbs = require("hbs");
+hbs.registerHelper("equal", require("handlebars-helper-equal"));
 
 const app = express();
 
@@ -24,6 +25,9 @@ const capitalized = (string) =>
   string[0].toUpperCase() + string.slice(1).toLowerCase();
 
 app.locals.title = `${capitalized(projectName)}`;
+
+const localRes = require("./middleware/localRes");
+app.use("/", localRes);
 
 // 👇 Start handling routes here
 const index = require("./routes/index");

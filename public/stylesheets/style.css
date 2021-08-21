@@ -73,12 +73,12 @@ ul li {
   line-height: 20px;
 }
 
-#to-right {
+#to-right, #signup-in {
   padding: 1em;
   float: right;
 }
 
-#to-right span {
+#to-right span #signup-in {
   color: #43a3e6;
   font-size: 1.5em;
 }
@@ -102,8 +102,8 @@ ul li {
   display: inline;
 }
 
-#logout-form button {
-  width: 120px;
+#logout-form button, #delete-btn {
+  width: 100px;
 }
 
 .posts {
@@ -113,7 +113,7 @@ ul li {
   justify-content: space-evenly;
 }
 
-.posts img {
+.posts img,  .details img, .profile-post img{
   width: 60vh;
 }
 
@@ -124,6 +124,9 @@ ul li {
   margin-top: 5%;
 }
 
-.details img {
-  width: 60vh;
+#delete-form {
+  float: left;
+  margin-top: 2vh;
 }
+
+

@@ -6,9 +6,9 @@
 
 - A website for cycling & camping fans
 - A publishing platform for checking/posting cycle routes and camping info
-- Only registered user can check details, create, edit, delete and comment each post
+- Only registered user can check details, create, edit, delete and *comment each post (future planned feature)*
 
-## Technologies 
+## Technologies & Methodologies
 
 - Node.js
 - Express, Express-Session
